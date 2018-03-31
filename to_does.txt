@@ -1,0 +1,8 @@
+#Add train
+
+Stations collection - station model
+                      destinations list
+
+- each station is identified by unique name
+- given route destination can be added only once
+- you cant add station name to destinations list
