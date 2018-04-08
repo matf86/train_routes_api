@@ -40,7 +40,7 @@ class AddTrainTest extends TestCase
             'Poznań', 'Wadowice'
         ]];
 
-        $response = $this->json('POST','/api/trains', $payload);
+        $response = $this->post('/api/trains', $payload);
 
         $response->assertStatus(200);
 
@@ -57,9 +57,9 @@ class AddTrainTest extends TestCase
             'Poznań', 'Wadowice'
         ]];
 
-        $this->json('POST','/api/trains', $payload);
+        $this->post('/api/trains', $payload);
 
-        $response = $this->json('POST','/api/trains', $payload);
+        $response = $this->post('/api/trains', $payload);
 
         $response->assertStatus(409);
     }
@@ -74,7 +74,7 @@ class AddTrainTest extends TestCase
             'Poznań', 'Poznań'
         ]];
 
-        $response = $this->json('POST','/api/trains', $payload);
+        $response = $this->post('/api/trains', $payload);
 
         $response->assertStatus(422);
 
@@ -91,7 +91,7 @@ class AddTrainTest extends TestCase
             'Poznań', 'Wadowice'
         ]];
 
-        $response = $this->json('POST','/api/trains', $payload);
+        $response = $this->post('/api/trains', $payload);
 
         $response->assertStatus(200);
 
@@ -128,7 +128,7 @@ class AddTrainTest extends TestCase
             'Poznań', 'Wadowice'
         ]];
 
-        $this->json('POST','/api/trains', $payload);
+        $this->post('/api/trains', $payload);
 
         $result = Station::where('name', 'poznań')->get()->map(function($item) {
             return $item->destinations;
@@ -143,7 +143,7 @@ class AddTrainTest extends TestCase
     {
         $payload = ['Poznań', 'Środa Śląska'];
 
-        $response = $this->json('POST','/api/trains', $payload);
+        $response = $this->post('/api/trains', $payload);
 
         $response->assertStatus(422);
     }
@@ -156,7 +156,7 @@ class AddTrainTest extends TestCase
             'Poznań', 'Środa Wielkopolska', 'Krotoszyn'
         ]];
 
-        $response = $this->json('POST','/api/trains', $payload);
+        $response = $this->post('/api/trains', $payload);
 
         $response->assertStatus(422);
 
@@ -164,7 +164,7 @@ class AddTrainTest extends TestCase
             'Poznań',
         ]];
 
-        $response = $this->json('POST','/api/trains', $payload);
+        $response = $this->post('/api/trains', $payload);
 
         $response->assertStatus(422);
     }
@@ -177,7 +177,7 @@ class AddTrainTest extends TestCase
             1, 2
         ]];
 
-        $response = $this->json('POST','/api/trains', $payload);
+        $response = $this->post('/api/trains', $payload);
 
         $response->assertStatus(422);
     }
@@ -190,7 +190,7 @@ class AddTrainTest extends TestCase
             'Poznań', 'Poznań'
         ]];
 
-        $response = $this->json('POST','/api/trains', $payload);
+        $response = $this->post('/api/trains', $payload);
 
         $response->assertStatus(422);
     }
@@ -203,7 +203,7 @@ class AddTrainTest extends TestCase
             'Poznań', 'Kraków'
         ]];
 
-        $response = $this->json('POST','/api/trains', $payload);
+        $response = $this->post('/api/trains', $payload);
 
         $response->assertStatus(422);
     }

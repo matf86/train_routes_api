@@ -6,3 +6,108 @@ Stations collection - station model
 - each station is identified by unique name
 - given route destination can be added only once
 - you cant add station name to destinations list
+
+
+        // create an empty queue
+        $q = new \SplQueue();
+
+        // enqueue the origin vertex and mark as visited
+        $q->enqueue($start);
+        $visited[] = $start;
+
+        // this is used to track the path back from each node
+        $path = [];
+        $path[$start] = new \SplDoublyLinkedList();
+        $path[$start]->setIteratorMode(
+            \SplDoublyLinkedList::IT_MODE_FIFO|\SplDoublyLinkedList::IT_MODE_KEEP
+        );
+
+        $path[$start]->push($start);
+
+        $found = false;
+        // while queue is not empty and destination not found
+        while (!$q->isEmpty()) {
+            $t = $q->dequeue();
+
+            $neighbours = Station::findOrFail($t)->destinations;
+
+            if ((bool) $neighbours) {
+                // for each adjacent neighbor
+                foreach ($neighbours as $node) {
+                    if (!in_array($node, $visited)) {
+                        // if not yet visited, enqueue vertex and mark
+                        // as visited
+                        $q->enqueue($node);
+                        // add vertex to current path
+                        $path[$node] = clone $path[$t];
+                        $path[$node]->push($node);
+                        $visited[] = $t;
+                    }
+                }
+            }
+        }
+
+        return $path;
+
+        // Get parent of node (recursive)
+        var getParent = function (rootNode, rootId) {
+
+            if (rootNode._id === rootId)
+                return rootNode;
+
+            for (var i = 0; i < rootNode.children.length; i++) {
+                var child = rootNode.children[i];
+                if (child._id === rootId)
+                    return child;
+
+                if (child.children.length > 0)
+                    var childResult = getParent(child, rootId);
+
+                if (childResult != null) return childResult;
+            }
+            return null;
+       };
+
+              $q = new \SplQueue();
+               $paths['routes'][] = $from;
+
+               $q->enqueue($from);
+
+               while (!$q->isEmpty()) {
+                   $node = $q->dequeue();
+
+                   if(!isset($list[$node])) {
+                       return $paths;
+                   }
+
+                   $parents = $list[$node];
+
+                   if(is_array($parents)) {
+                       foreach ($parents as $k => $parent) {
+                           $q->enqueue($parent);
+                           $paths['routes'][] = $parent;
+                       }
+                   }
+               }
+               return $paths;
+
+ //////
+                   protected function printPath(array $list, $from, $result, $path)
+                   {
+                       $path->push($from);
+
+                       if($list[$from] == false) {
+                           $result->push($path);
+               //            dd($result);
+                       }
+
+
+                       if($list[$from]) {
+                           foreach($list[$from] as $node) {
+                               $this->printPath($list, $node, $result, $path);
+                           }
+                       }
+
+
+                       return $result;
+                   }

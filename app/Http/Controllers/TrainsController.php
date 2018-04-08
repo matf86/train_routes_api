@@ -15,12 +15,12 @@ class TrainsController extends Controller
 
             Station::addDestination($request['train'][0], $request['train'][1]);
 
+            return response()->json(['message' => 'Train route successfully added']);
+
         } catch (DestinationException $e) {
 
             return response()->json(['message' => 'Posted route already exists'], 409);
 
         }
-
-        return response()->json(['message' => 'Train route successfully added']);
     }
 }

@@ -5,9 +5,9 @@ namespace Tests\Unit;
 use App\Exceptions\DestinationException;
 use App\Station;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Cache;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+
 
 class StationTest extends TestCase
 {
@@ -37,6 +37,73 @@ class StationTest extends TestCase
 
         $this->assertEquals($start_station, $result->name);
         $this->assertContains($destination, $result->destinations);
+    }
+
+    /** @test */
+
+    function when_new_destination_is_added_cache_is_flushed()
+    {
+        $start_station = 'poznań';
+        $destination = 'kraków';
+
+        factory(Station::class)->create([
+            'name' => 'poznań',
+            'destinations' => []
+        ]);
+
+        Cache::shouldReceive('flush')->once();
+
+        Station::addDestination($start_station, $destination);
+    }
+
+    /** @test */
+
+    function can_get_all_routes_matrix()
+    {
+        factory(Station::class)->create([
+            'name' => 'poznań',
+            'destinations' => ['łódź']
+        ]);
+        factory(Station::class)->create([
+            'name' => 'warszawa',
+            'destinations' => ['łódź', ]
+        ]);
+        factory(Station::class)->create([
+            'name' => 'łódź',
+            'destinations' => ['poznań', 'warszawa']
+        ]);
+
+        $response = Station::getAllRoutesMatrix();
+
+        $expected_result = [
+            'poznań' => ['łódź'],
+            'warszawa' => ['łódź'],
+            'łódź' => ['poznań', 'warszawa']
+        ];
+
+        $this->assertEquals(sort($response), sort($expected_result));
+    }
+
+    /** @test */
+
+    function all_routes_matrix_is_cached()
+    {
+        factory(Station::class)->create([
+            'name' => 'poznań',
+            'destinations' => ['łódź']
+        ]);
+        factory(Station::class)->create([
+            'name' => 'warszawa',
+            'destinations' => ['łódź', ]
+        ]);
+        factory(Station::class)->create([
+            'name' => 'łódź',
+            'destinations' => ['poznań', 'warszawa']
+        ]);
+
+        Station::getAllRoutesMatrix();
+
+        $this->assertTrue(Cache::has('all_routes'));
     }
 
     /** @test */

@@ -7,7 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class AddTrainRequest extends FormRequest
+class FindRouteRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,8 +27,8 @@ class AddTrainRequest extends FormRequest
     public function rules()
     {
         return [
-            'train' => 'required|array|min:2|max:2',
-            'train.*' => ['string','distinct', new StationExists]
+            'start' => ['required', 'string','different:destination', new StationExists()],
+            'destination' => ['required', 'string', new StationExists()]
         ];
     }
 

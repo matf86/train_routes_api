@@ -28,7 +28,7 @@ class StationExists implements Rule
      */
     public function passes($attribute, $value)
     {
-        $this->value = $value;
+        $this->value = ucfirst($value);
 
         return (boolean) Station::find($value);
     }
@@ -40,6 +40,6 @@ class StationExists implements Rule
      */
     public function message()
     {
-        return "Train route can not be added. Station {$this->value} does not exist.";
+        return "Station {$this->value} does not exist.";
     }
 }

@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Exceptions\DestinationException;
+use Illuminate\Support\Facades\Cache;
 use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
 
 
@@ -24,6 +25,18 @@ class Station extends Eloquent
             throw new DestinationException;
         }
 
+        Cache::flush();
+
         return $result;
+    }
+
+    public static function getAllRoutesMatrix()
+    {
+        return Cache::rememberForever('all_routes', function() {
+            return self::all()
+                    ->mapWithKeys(function ($item) {
+                        return [$item['name'] => $item['destinations']];
+                    })->toArray();
+        });
     }
 }

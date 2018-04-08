@@ -15,4 +15,5 @@ use Illuminate\Http\Request;
 
 Route::middleware(['toLower'])->group(function() {
     Route::post('/trains', 'TrainsController@store');
+    Route::get('/shortest_route', 'ShortestRouteController@show');
 });
