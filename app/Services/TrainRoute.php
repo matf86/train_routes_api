@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-
 use App\Exceptions\NoRouteFoundException;
 use App\Station;
 use Illuminate\Support\Facades\Cache;
